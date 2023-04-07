@@ -4,10 +4,15 @@ class Cell
   def initialize(coordinate)
     @coordinate = coordinate
     @ship = nil
+    @fired_upon = false
   end
 
   def empty?
-    @ship.nil?
+    if @ship == nil
+      true
+    else
+      false
+    end
   end
 
   def place_ship(ship)
@@ -15,11 +20,27 @@ class Cell
   end
 
   def fired_upon?
-    @ship.health < @ship.length
+    @fired_upon
   end
 
   def fire_upon
-    @ship.hit
+    @fired_upon = true
+    if empty? == false
+      @ship.hit
+    end
   end
 
+  def render(show_ship = false)
+    if fired_upon? == true && empty? == true
+      "M"
+    elsif fired_upon? == true && @ship.sunk? == true && empty? == false
+      "X"
+    elsif fired_upon? == true && empty? == false
+      "H"
+    elsif empty? == false && show_ship == true
+      "S"
+    else
+      "."
+    end
+  end
 end
