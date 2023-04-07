@@ -11,10 +11,8 @@ RSpec.describe Ship do
     end
 
     it 'has attributes' do
-      expect(@cruiser.name).to eq("Cruiser")
-      
+      expect(@cruiser.name).to eq('Cruiser')
       expect(@cruiser.length).to eq(3)
-
       expect(@cruiser.health).to eq(3)
     end
   end
@@ -27,12 +25,17 @@ RSpec.describe Ship do
 
   describe '#hit' do
     it 'can hit ship' do
+      expect(@cruiser.health).to eq(3)
       expect(@cruiser.sunk?).to be(false)
-      
-      cruiser.hit
-
+      @cruiser.hit
+      expect(@cruiser.health).to eq(2)
+      expect(@cruiser.sunk?).to be(false)
+      @cruiser.hit
+      expect(@cruiser.health).to eq(1)
+      expect(@cruiser.sunk?).to be(false)
+      @cruiser.hit
+      expect(@cruiser.health).to eq(0)
       expect(@cruiser.sunk?).to be(true)
-
     end
   end
 end
