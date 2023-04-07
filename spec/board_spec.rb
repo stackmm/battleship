@@ -12,7 +12,7 @@ RSpec.describe Board do
     it 'has cells attributes' do
       expect(@board.cells).to be_a(Hash)
       expect(@board.cells.count).to eq(16)
-      expect(@board.cells.values).to be_a(Cell)
+      expect(@board.cells.values.first).to be_a(Cell)
     end
   end
 end
