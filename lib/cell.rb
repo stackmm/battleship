@@ -8,11 +8,7 @@ class Cell
   end
 
   def empty?
-    if @ship == nil
-      true
-    else
-      false
-    end
+    @ship.nil?
   end
 
   def place_ship(ship)
@@ -25,19 +21,17 @@ class Cell
 
   def fire_upon
     @fired_upon = true
-    if empty? == false
-      @ship.hit
-    end
+    @ship.hit if !empty?
   end
 
   def render(show_ship = false)
-    if fired_upon? == true && empty? == true
+    if fired_upon? && empty?
       "M"
-    elsif fired_upon? == true && @ship.sunk? == true && empty? == false
+    elsif fired_upon? && @ship.sunk?
       "X"
-    elsif fired_upon? == true && empty? == false
+    elsif fired_upon? && !empty?
       "H"
-    elsif empty? == false && show_ship == true
+    elsif !empty? && show_ship
       "S"
     else
       "."
