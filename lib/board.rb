@@ -27,4 +27,10 @@ class Board
     end
     false
   end
+
+  def valid_placement?(ship, ship_coordinates)
+    range = ship_coordinates.first..ship_coordinates.last
+    array  = range.to_a
+    ship_coordinates.count == ship.length && array == ship_coordinates
+  end
 end
