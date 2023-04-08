@@ -32,9 +32,11 @@ RSpec.describe Board do
     it 'can check for valid ship length' do
       expect(@board.valid_placement?(@cruiser, ['A1', 'A2'])).to be(false)
       expect(@board.valid_placement?(@submarine, ['A2', 'A3', 'A4'])).to be(false)
+      expect(@board.valid_placement?(@cruiser, ['B2', 'C2', 'D2'])).to be(true)
+      expect(@board.valid_placement?(@submarine, ['A4', 'B4'])).to be(true)
     end
 
-    it 'can check for consecutive coordinates' do
+    it 'can check for consecutive horizontal coordinates' do
       expect(@board.valid_placement?(@cruiser, ['A1', 'A2', 'A4'])).to be(false)
       expect(@board.valid_placement?(@submarine, ['A1', 'C1'])).to be(false)
       expect(@board.valid_placement?(@cruiser, ['A3', 'A2', 'A1'])).to be(false)
