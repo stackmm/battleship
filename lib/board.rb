@@ -22,15 +22,26 @@ class Board
   end
 
   def valid_coordinate?(coordinate)  
-    @cells.each do |key, value|
-      return true if value.coordinate == coordinate
-    end
-    false
+    # @cells.each do |key, value|
+    #   return true if value.coordinate == coordinate
+    # end
+    # false
+    @cells.keys.include?(coordinate)
   end
 
   def valid_placement?(ship, ship_coordinates)
     range = ship_coordinates.first..ship_coordinates.last
     array  = range.to_a
-    ship_coordinates.count == ship.length && array == ship_coordinates
+
+    valid_length?(ship, ship_coordinates) && array == ship_coordinates
+
+    # return false unless ship_coordinates.count == ship.length
+    # return false unless array == ship_coordinates
+    
   end
+
+  def valid_length?(ship, ship_coordinates)
+    ship_coordinates.count == ship.length
+  end
+
 end
