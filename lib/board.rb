@@ -1,5 +1,6 @@
 class Board
   attr_reader :cells
+  
   def initialize
     @cells = {
       'A1' => Cell.new('A1'),
@@ -22,15 +23,32 @@ class Board
   end
 
   def valid_coordinate?(coordinate)  
-    @cells.each do |key, value|
-      return true if value.coordinate == coordinate
+    @cells.keys.include?(coordinate)
+  end
+
+  def valid_length?(ship, ship_coordinates)
+    ship_coordinates.count == ship.length
+  end
+
+  def valid_horizontal_placement?(ship, ship_coordinates)
+    range = ship_coordinates.first..ship_coordinates.last
+    array = range.to_a
+    array == ship_coordinates
+  end
+
+  def valid_vertical_placement?(ship, ship_coordinates)
+    ship_coordinates.each_cons(2).all? do |ship_coordinate, next_ship_coordinate|
+      ship_coordinate[0].ord + 1 == next_ship_coordinate[0].ord
     end
-    false
   end
 
   def valid_placement?(ship, ship_coordinates)
-    range = ship_coordinates.first..ship_coordinates.last
-    array  = range.to_a
-    ship_coordinates.count == ship.length && array == ship_coordinates
+    valid_length?(ship, ship_coordinates) && 
+    if ship_coordinates.first[1] == ship_coordinates[1][1] && ship_coordinates[1][1] == ship_coordinates.last[1]
+      valid_vertical_placement?(ship, ship_coordinates)
+    else
+      valid_horizontal_placement?(ship, ship_coordinates)
+    end
   end
+
 end
