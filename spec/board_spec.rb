@@ -87,4 +87,18 @@ RSpec.describe Board do
     end
   end
 
+  describe '#no_overlapping_ships' do
+    it 'can check for overlapping ships' do
+      expect(@board.no_overlapping_ships?(@submarine, ['A1', 'B1'])).to be(true)
+      @board.place(@cruiser, ['A1', 'A2', 'A3'])
+      expect(@board.no_overlapping_ships?(@submarine, ['A1', 'B1'])).to be(false)
+    end
+
+    it 'can check for overlapping ships from the #valid_placement? method' do
+      expect(@board.valid_placement?(@cruiser, ['A2', 'B2', 'C2'])).to be(true)
+      @board.place(@submarine, ['A2', 'A3'])
+      expect(@board.valid_placement?(@cruiser, ['A2', 'B2', 'C2'])).to be(false)
+    end
+  end
+
 end
