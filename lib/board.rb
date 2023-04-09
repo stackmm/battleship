@@ -50,13 +50,22 @@ class Board
 
   def valid_placement?(ship, ship_coordinates)
     valid_length?(ship, ship_coordinates) &&
-    consecutive_coordinates?(ship, ship_coordinates)
+    consecutive_coordinates?(ship, ship_coordinates) &&
+    no_overlapping_ships?(ship, ship_coordinates)
   end
 
   def place(ship, ship_coordinates)
     ship_coordinates.each do |coordinate|
       @cells[coordinate].place_ship(ship)
     end
+  end
+
+  def no_overlapping_ships?(ship, ship_coordinates)
+    ship_coordinates.each do |coordinate|
+      cell = @cells[coordinate]
+      return false unless cell.empty?
+    end
+    true
   end
 
 end
