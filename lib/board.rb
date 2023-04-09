@@ -68,7 +68,7 @@ class Board
     true
   end
 
-    def render(show_ships = false)
+  def render(show_ships = false)
     "  1 2 3 4 \n" +
     "A #{@cells['A1'].render(show_ships)} #{@cells['A2'].render(show_ships)} #{@cells['A3'].render(show_ships)} #{@cells['A4'].render(show_ships)} \n" +
     "B #{@cells['B1'].render(show_ships)} #{@cells['B2'].render(show_ships)} #{@cells['B3'].render(show_ships)} #{@cells['B4'].render(show_ships)} \n" +

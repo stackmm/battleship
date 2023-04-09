@@ -102,7 +102,7 @@ RSpec.describe Board do
   end
   
   describe '#render' do
-    it 'can render a board' do
+    it 'can render a board without boats' do
       expect(@board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
     end
 
