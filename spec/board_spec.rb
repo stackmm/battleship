@@ -100,5 +100,103 @@ RSpec.describe Board do
       expect(@board.valid_placement?(@cruiser, ['A2', 'B2', 'C2'])).to be(false)
     end
   end
+  
+  describe '#render' do
+    it 'can render a board' do
+      expect(@board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
+    end
+
+    it 'can render a boat' do
+      expect(@board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
+      @board.place(@cruiser, ['A1', 'A2', 'A3'])
+      cell_1 = @board.cells['A1']
+      cell_2 = @board.cells['A2']
+      cell_3 = @board.cells['A3']
+      expect(cell_1.empty?).to eq(false)
+      expect(cell_2.empty?).to eq(false)
+      expect(cell_3.empty?).to eq(false)
+      expect(@board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n")
+    end
+
+    it 'can render a boat and render a miss' do
+      expect(@board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
+      @board.place(@cruiser, ['A1', 'A2', 'A3'])
+      cell_1 = @board.cells['A1']
+      cell_2 = @board.cells['A2']
+      cell_3 = @board.cells['A3']
+      cell_4 = @board.cells['A4']
+      expect(cell_1.empty?).to eq(false)
+      expect(cell_2.empty?).to eq(false)
+      expect(cell_3.empty?).to eq(false)
+      expect(@board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n")
+      cell_4.fire_upon
+      expect(cell_4.fired_upon?).to eq(true)
+      expect(cell_4.empty?).to eq(true)
+      expect(cell_4.render).to eq('M')
+      expect(@board.render(true)).to eq("  1 2 3 4 \nA S S S M \nB . . . . \nC . . . . \nD . . . . \n")
+    end
+
+    it 'can render a boat and render a hit' do
+      expect(@board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
+      @board.place(@cruiser, ['A1', 'A2', 'A3'])
+      cell_1 = @board.cells['A1']
+      cell_2 = @board.cells['A2']
+      cell_3 = @board.cells['A3']
+      expect(cell_1.empty?).to eq(false)
+      expect(cell_2.empty?).to eq(false)
+      expect(cell_3.empty?).to eq(false)
+      expect(@board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n")
+      cell_1.fire_upon
+      expect(cell_1.fired_upon?).to eq(true)
+      expect(cell_1.empty?).to eq(false)
+      expect(cell_1.render).to eq('H')
+      expect(@board.render).to eq("  1 2 3 4 \nA H . . . \nB . . . . \nC . . . . \nD . . . . \n")
+    end
+
+    it 'can render a boat and render a sink' do
+      expect(@board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
+      @board.place(@cruiser, ['A1', 'A2', 'A3'])
+      cell_1 = @board.cells['A1']
+      cell_2 = @board.cells['A2']
+      cell_3 = @board.cells['A3']
+      expect(cell_1.empty?).to eq(false)
+      expect(cell_2.empty?).to eq(false)
+      expect(cell_3.empty?).to eq(false)
+      expect(@board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n")
+      cell_1.fire_upon
+      expect(cell_1.fired_upon?).to eq(true)
+      expect(cell_1.empty?).to eq(false)
+      expect(cell_1.render).to eq('H')
+      expect(@board.render).to eq("  1 2 3 4 \nA H . . . \nB . . . . \nC . . . . \nD . . . . \n")
+      cell_2.fire_upon
+      expect(cell_2.fired_upon?).to eq(true)
+      expect(cell_2.empty?).to eq(false)
+      expect(cell_2.render).to eq('H')
+      expect(@board.render).to eq("  1 2 3 4 \nA H H . . \nB . . . . \nC . . . . \nD . . . . \n")
+      cell_3.fire_upon
+      expect(cell_3.fired_upon?).to eq(true)
+      expect(cell_3.empty?).to eq(false)
+      expect(cell_3.render).to eq('X')
+      expect(@board.render).to eq("  1 2 3 4 \nA X X X . \nB . . . . \nC . . . . \nD . . . . \n")
+    end
+
+    it 'renders a boat, a miss, a hit, and a sink' do
+      expect(@board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
+      @board.place(@cruiser, ['A1', 'A2', 'A3'])
+      @board.place(@submarine, ['B1', 'C1'])
+      cell_1 = @board.cells['A1']
+      cell_2 = @board.cells['A2']
+      cell_3 = @board.cells['A3']
+      cell_4 = @board.cells['B1']
+      cell_5 = @board.cells['C1']
+      cell_6 = @board.cells['D1']
+      expect(@board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB S . . . \nC S . . . \nD . . . . \n")
+      cell_1.fire_upon
+      cell_4.fire_upon
+      cell_5.fire_upon
+      cell_6.fire_upon
+      expect(@board.render(true)).to eq("  1 2 3 4 \nA H S S . \nB X . . . \nC X . . . \nD M . . . \n")
+    end
+  end
 
 end
