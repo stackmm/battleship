@@ -53,4 +53,10 @@ class Board
     consecutive_coordinates?(ship, ship_coordinates)
   end
 
+  def place(ship, ship_coordinates)
+    ship_coordinates.each do |coordinate|
+      @cells[coordinate].place_ship(ship)
+    end
+  end
+
 end
