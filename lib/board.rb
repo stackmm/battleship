@@ -30,25 +30,42 @@ class Board
     ship_coordinates.count == ship.length
   end
 
-  def valid_horizontal_placement?(ship, ship_coordinates)
-    range = ship_coordinates.first..ship_coordinates.last
-    array = range.to_a
-    array == ship_coordinates
+  def consecutive_coordinates?(ship, ship_coordinates)
+    if ship_coordinates.first[0] == ship_coordinates[1][0] && ship_coordinates[1][0] == ship_coordinates.last[0]
+      range = ship_coordinates.first..ship_coordinates.last
+      array = range.to_a
+      array == ship_coordinates
+    elsif ship_coordinates.first[1] == ship_coordinates[1][1] && ship_coordinates[1][1] == ship_coordinates.last[1]
+      consecutive_vertical_coordinates?(ship, ship_coordinates)
+    else 
+      false # diagonal always returns false
+    end
   end
 
-  def valid_vertical_placement?(ship, ship_coordinates)
+  def consecutive_vertical_coordinates?(ship, ship_coordinates)
     ship_coordinates.each_cons(2).all? do |ship_coordinate, next_ship_coordinate|
       ship_coordinate[0].ord + 1 == next_ship_coordinate[0].ord
     end
   end
 
   def valid_placement?(ship, ship_coordinates)
-    valid_length?(ship, ship_coordinates) && 
-    if ship_coordinates.first[1] == ship_coordinates[1][1] && ship_coordinates[1][1] == ship_coordinates.last[1]
-      valid_vertical_placement?(ship, ship_coordinates)
-    else
-      valid_horizontal_placement?(ship, ship_coordinates)
+    valid_length?(ship, ship_coordinates) &&
+    consecutive_coordinates?(ship, ship_coordinates) &&
+    no_overlapping_ships?(ship, ship_coordinates)
+  end
+
+  def place(ship, ship_coordinates)
+    ship_coordinates.each do |coordinate|
+      @cells[coordinate].place_ship(ship)
     end
+  end
+
+  def no_overlapping_ships?(ship, ship_coordinates)
+    ship_coordinates.each do |coordinate|
+      cell = @cells[coordinate]
+      return false unless cell.empty?
+    end
+    true
   end
 
 end
