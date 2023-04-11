@@ -1,30 +1,32 @@
 class Game 
-  attr_reader :player, :computer
-
   def initialize
-    @player = Player.new
-    @computer = Player.new
+    @player_board = Board.new
+    @computer_board = Board.new
+    @player_ships = []
+    @computer_ships = []
   end
 
   def main_menu
-    p 'Welcome to BATTLESHIP'
-    p 'Enter p to play. Enter q to quit.'
-    response = gets.chomp
-      if response == "p"
-        start_game
-      elsif response == "q"
-        p "Game Ended"
-        main_menu
-      else "Invalid Input"
-        main_menu
-      end
+    system "clear"
+    p "Welcome to BATTLESHIP"
+    p "Enter p to play. Enter q to quit."
+    input = gets.chomp.downcase
+    if input == "p"
+      setup_game
+      play_game
+    elsif input == "q"
+      p "Game Ended"
+      exit
+    else 
+      p "Invalid Input. Please try again"
+      main_menu
+    end
   end
 
-  def start_game
-    p 'I have laid out my ships on the grid.'
-    p 'You now need to lay out your two ships.'
-    p 'The Cruiser is three units long and the Submarine is two units long.'
-    p @player.board.render
+  def setup_game
+    place_computer_ships
+    place_player_ships
   end
+
+
 end
-
