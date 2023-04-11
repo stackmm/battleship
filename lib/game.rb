@@ -8,17 +8,17 @@ class Game
 
   def main_menu
     system "clear"
-    p "Welcome to BATTLESHIP"
-    p "Enter p to play. Enter q to quit."
+    puts "Welcome to BATTLESHIP"
+    puts "Enter p to play. Enter q to quit."
     input = gets.chomp.downcase
     if input == "p"
       setup_game
       play_game
     elsif input == "q"
-      p "Game Ended"
+      puts "Game Ended"
       exit
     else 
-      p "Invalid Input. Please try again"
+      puts "Invalid Input. Please try again"
       main_menu
     end
   end
@@ -51,25 +51,25 @@ class Game
 
   def place_player_ships
     system "clear"
-    p "I have laid out my ships on the grid."
-    p "You now need to lay out your two ships."
-    p "The Cruiser is three units long and the Submarine is two units long."
-    p @player_board.render(true)
+    puts "I have laid out my ships on the grid."
+    puts "You now need to lay out your two ships."
+    puts "The Cruiser is three units long and the Submarine is two units long."
+    puts @player_board.render(true)
     @player_ships << player_ship_input(Ship.new('Cruiser', 3))
     system "clear"
-    p @player_board.render(true)
+    puts @player_board.render(true)
     @player_ships << player_ship_input(Ship.new('Submarine', 2))
   end
 
   def player_ship_input(ship)
     loop do
-      p "Enter the squares for the #{ship.name} (#{ship.length} spaces):"
+      puts "Enter the squares for the #{ship.name} (#{ship.length} spaces):"
       input = gets.chomp.upcase.split
       if @player_board.valid_placement?(ship, input)
         @player_board.place(ship, input)
         break
       else
-        p "Those are invalid coordinates. Please try again:"
+        puts "Those are invalid coordinates. Please try again:"
       end
     end
     ship
@@ -84,32 +84,32 @@ class Game
       break if game_over?
     end
     if computer_lost?
-      p "You won!"
+      puts "You won!"
     else
-      p "I won!"
+      puts "I won!"
     end
     play_again?
   end
 
   def display_boards
-    p "=============COMPUTER BOARD============="
-    p @computer_board.render
-    p "==============PLAYER BOARD=============="
-    p @player_board.render(true)
+    puts "=============COMPUTER BOARD============="
+    puts @computer_board.render
+    puts "==============PLAYER BOARD=============="
+    puts @player_board.render(true)
   end
 
   def shoot_player
     loop do
-      p "Enter the coordinate for your shot:"
+      puts "Enter the coordinate for your shot:"
       input = gets.chomp.upcase
       if @computer_board.valid_coordinate?(input) && !@computer_board.cells[input].fired_upon?
         @computer_board.cells[input].fire_upon
         results_player(input)
         break
       elsif !@computer_board.valid_coordinate?(input)
-        p "Please enter a valid coordinate:"
+        puts "Please enter a valid coordinate:"
       elsif @computer_board.cells[input].fired_upon?
-        p "You have already fired on #{input}. Please choose another coordinate."
+        puts "You have already fired on #{input}. Please choose another coordinate."
       end
     end
   end
@@ -128,11 +128,11 @@ class Game
     cell = @computer_board.cells[coordinate]
     if cell.fired_upon?
       if cell.empty?
-        p "Your shot on #{coordinate} was a miss."
+        puts "Your shot on #{coordinate} was a miss."
       else
-        p "Your shot on #{coordinate} was a hit."
+        puts "Your shot on #{coordinate} was a hit."
         if cell.ship.sunk?
-          p "You sunk my #{cell.ship.name}!"
+          puts "You sunk my #{cell.ship.name}!"
         end
       end
     end
@@ -142,11 +142,11 @@ class Game
     cell = @player_board.cells[coordinate]
     if cell.fired_upon?
       if cell.empty?
-        p "My shot on #{coordinate} was a miss."
+        puts "My shot on #{coordinate} was a miss."
       else
-        p "My shot on #{coordinate} was a hit."
+        puts "My shot on #{coordinate} was a hit."
         if cell.ship.sunk?
-          p "I sunk your #{cell.ship.name}!"
+          puts "I sunk your #{cell.ship.name}!"
         end
       end
     end
@@ -169,14 +169,14 @@ class Game
   end
 
   def play_again?
-    p "Would you like to restart the game? (y/n)"
+    puts "Would you like to restart the game? (y/n)"
     input = gets.chomp.downcase
     if input == 'y'
       main_menu
     elsif input == 'n'
       exit
     else
-      p "Invalid response. Please try again."
+      puts "Invalid response. Please try again."
       play_again?
     end
   end
