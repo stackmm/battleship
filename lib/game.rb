@@ -74,5 +74,110 @@ class Game
     end
     ship
   end
+  
+  def play_game
+    loop do
+      display_boards
+      shoot_player
+      break if game_over?
+      shoot_computer
+      break if game_over?
+    end
+    if computer_lost?
+      p "You won!"
+    else
+      p "I won!"
+    end
+    play_again?
+  end
 
+  def display_boards
+    p "=============COMPUTER BOARD============="
+    p @computer_board.render
+    p "==============PLAYER BOARD=============="
+    p @player_board.render(true)
+  end
+
+  def shoot_player
+    loop do
+      p "Enter the coordinate for your shot:"
+      input = gets.chomp.upcase
+      if @computer_board.valid_coordinate?(input) && !@computer_board.cells[input].fired_upon?
+        @computer_board.cells[input].fire_upon
+        results_player(input)
+        break
+      elsif !@computer_board.valid_coordinate?(input)
+        p "Please enter a valid coordinate:"
+      elsif @computer_board.cells[input].fired_upon?
+        p "You have already fired on #{input}. Please choose another coordinate."
+      end
+    end
+  end
+
+  def shoot_computer
+    loop do
+      input = @player_board.cells.keys.sample
+      if !@player_board.cells[input].fired_upon?
+        @player_board.cells[input].fire_upon
+        break
+      end
+    end
+  end
+
+  def results_player(coordinate)
+    cell = @computer_board.cells[coordinate]
+    if cell.fired_upon?
+      if cell.empty?
+        p "Your shot on #{coordinate} was a miss."
+      else
+        p "Your shot on #{coordinate} was a hit."
+        if cell.ship.sunk?
+          p "You sunk my #{cell.ship.name}!"
+        end
+      end
+    end
+  end
+
+  def results_computer(coordinate)
+    cell = @player_board.cells[coordinate]
+    if cell.fired_upon?
+      if cell.empty?
+        p "My shot on #{coordinate} was a miss."
+      else
+        p "My shot on #{coordinate} was a hit."
+        if cell.ship.sunk?
+          p "I sunk your #{cell.ship.name}!"
+        end
+      end
+    end
+  end
+
+  def game_over?
+    player_lost? || computer_lost?
+  end
+
+  def player_lost?
+    @player_ships.all? do |ship|
+      ship.sunk?
+    end
+  end
+
+  def computer_lost?
+    @computer_ships.all? do |ship|
+      ship.sunk?
+    end
+  end
+
+  def play_again?
+    p "Would you like to restart the game? (y/n)"
+    input = gets.chomp.downcase
+    if input == 'y'
+      main_menu
+    elsif input == 'n'
+      exit
+    else
+      p "Invalid response. Please try again."
+      play_again?
+    end
+  end
 end
