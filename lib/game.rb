@@ -34,19 +34,13 @@ class Game
     @computer_ships << cruiser
     @computer_ships << submarine
     @computer_ships.each do |ship|
+      all_coordinates = @computer_board.cells.keys
       coordinates = []
-      loop do
-        coordinates = random_coordinates(ship)
-        break if @computer_board.valid_placement?(ship, coordinates)
+      until @computer_board.valid_placement?(ship, coordinates)
+        coordinates = all_coordinates.sample(ship.length)
       end
       @computer_board.place(ship, coordinates)
     end
-  end
-  
-  def random_coordinates(ship)
-    all_coordinates = @computer_board.cells.keys
-    random_index = rand(all_coordinates.length)
-    all_coordinates.slice(random_index, ship.length)
   end
 
   def place_player_ships
