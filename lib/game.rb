@@ -53,12 +53,14 @@ class Game
     system "clear"
     puts @player_board.render(true)
     @player_ships << player_ship_input(Ship.new('Submarine', 2))
+    system "clear"
   end
 
   def player_ship_input(ship)
     puts "Enter the squares for the #{ship.name} (#{ship.length} spaces):"
     input = gets.chomp.upcase.split
     until @player_board.valid_placement?(ship, input)
+      system "clear"
       puts "Those are invalid coordinates. Please try again:"
       input = gets.chomp.upcase.split
     end
@@ -68,6 +70,7 @@ class Game
   
   def play_game
     until game_over?
+      system "clear"
       display_boards
       shoot_player
       shoot_computer
@@ -84,36 +87,31 @@ class Game
   def display_boards
     puts "=============COMPUTER BOARD============="
     puts @computer_board.render
-    puts "==============PLAYER BOARD=============="
+    puts "\n==============PLAYER BOARD=============="
     puts @player_board.render(true)
   end
 
   def shoot_player
-    valid_input = false
-    until valid_input
-      puts "Enter the coordinate for your shot:"
-      input = gets.chomp.upcase
-      if @computer_board.valid_coordinate?(input) && !@computer_board.cells[input].fired_upon?
-        @computer_board.cells[input].fire_upon
-        results_player(input)
-        valid_input = true
-      elsif !@computer_board.valid_coordinate?(input)
+    puts "\nEnter the coordinate for your shot:"
+    input = gets.chomp.upcase
+    until @computer_board.valid_coordinate?(input) && !@computer_board.cells[input].fired_upon?
+      if !@computer_board.valid_coordinate?(input)
         puts "Please enter a valid coordinate:"
       elsif @computer_board.cells[input].fired_upon?
         puts "You have already fired on #{input}. Please choose another coordinate."
       end
+      input = gets.chomp.upcase
     end
+    @computer_board.cells[input].fire_upon
+    results_player(input)
   end
 
   def shoot_computer
-    valid_input = false
-    until valid_input
+    input = @player_board.cells.keys.sample
+    until !@player_board.cells[input].fired_upon?
       input = @player_board.cells.keys.sample
-      if !@player_board.cells[input].fired_upon?
-        @player_board.cells[input].fire_upon
-        valid_input = true
-      end
     end
+    @player_board.cells[input].fire_upon
   end
 
   def results_player(coordinate)
