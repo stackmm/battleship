@@ -56,17 +56,13 @@ class Game
   end
 
   def player_ship_input(ship)
-    valid_input = false
-    until valid_input
-      puts "Enter the squares for the #{ship.name} (#{ship.length} spaces):"
+    puts "Enter the squares for the #{ship.name} (#{ship.length} spaces):"
+    input = gets.chomp.upcase.split
+    until @player_board.valid_placement?(ship, input)
+      puts "Those are invalid coordinates. Please try again:"
       input = gets.chomp.upcase.split
-      if @player_board.valid_placement?(ship, input)
-        @player_board.place(ship, input)
-        valid_input = true
-      else
-        puts "Those are invalid coordinates. Please try again:"
-      end
     end
+    @player_board.place(ship, input)
     ship
   end
   
