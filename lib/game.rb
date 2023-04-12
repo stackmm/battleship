@@ -56,12 +56,13 @@ class Game
   end
 
   def player_ship_input(ship)
-    loop do
+    valid_input = false
+    until valid_input
       puts "Enter the squares for the #{ship.name} (#{ship.length} spaces):"
       input = gets.chomp.upcase.split
       if @player_board.valid_placement?(ship, input)
         @player_board.place(ship, input)
-        break
+        valid_input = true
       else
         puts "Those are invalid coordinates. Please try again:"
       end
@@ -70,13 +71,12 @@ class Game
   end
   
   def play_game
-    loop do
+    until game_over?
       display_boards
       shoot_player
-      break if game_over?
       shoot_computer
-      break if game_over?
     end
+
     if computer_lost?
       puts "You won!"
     else
@@ -93,13 +93,14 @@ class Game
   end
 
   def shoot_player
-    loop do
+    valid_input = false
+    until valid_input
       puts "Enter the coordinate for your shot:"
       input = gets.chomp.upcase
       if @computer_board.valid_coordinate?(input) && !@computer_board.cells[input].fired_upon?
         @computer_board.cells[input].fire_upon
         results_player(input)
-        break
+        valid_input = true
       elsif !@computer_board.valid_coordinate?(input)
         puts "Please enter a valid coordinate:"
       elsif @computer_board.cells[input].fired_upon?
@@ -109,11 +110,12 @@ class Game
   end
 
   def shoot_computer
-    loop do
+    valid_input = false
+    until valid_input
       input = @player_board.cells.keys.sample
       if !@player_board.cells[input].fired_upon?
         @player_board.cells[input].fire_upon
-        break
+        valid_input = true
       end
     end
   end
@@ -166,6 +168,7 @@ class Game
     puts "Would you like to restart the game? (y/n)"
     input = gets.chomp.downcase
     if input == 'y'
+      clear_boards
       main_menu
     elsif input == 'n'
       exit
@@ -173,5 +176,12 @@ class Game
       puts "Invalid response. Please try again."
       play_again?
     end
+  end
+
+  def clear_boards
+    @player_board = Board.new
+    @computer_board = Board.new
+    @player_ships = []
+    @computer_ships = []
   end
 end
