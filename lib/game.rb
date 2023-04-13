@@ -1,4 +1,5 @@
 class Game 
+  attr_reader :player_board, :computer_board, :player_ships, :computer_ships
   def initialize
     @player_board = Board.new
     @computer_board = Board.new
@@ -8,7 +9,7 @@ class Game
 
   def main_menu
     system "clear"
-    puts "Welcome to BATTLESHIP"
+    welcome_message
     puts "Enter p to play. Enter q to quit."
     input = gets.chomp.downcase
     if input == "p"
@@ -60,7 +61,7 @@ class Game
     puts "Enter the squares for the #{ship.name} (#{ship.length} spaces):"
     input = gets.chomp.upcase.split
     until @player_board.valid_placement?(ship, input)
-      system "clear"
+
       puts "Those are invalid coordinates. Please try again:"
       input = gets.chomp.upcase.split
     end
@@ -112,6 +113,8 @@ class Game
       input = @player_board.cells.keys.sample
     end
     @player_board.cells[input].fire_upon
+    results_computer(input)
+    sleep(1)
   end
 
   def results_player(coordinate)
@@ -177,5 +180,39 @@ class Game
     @computer_board = Board.new
     @player_ships = []
     @computer_ships = []
+  end
+
+  def welcome_message
+    puts <<-'EOF'
+
+    ____    __    ____  _______  __        ______   ______   .___  ___.  _______    
+    \   \  /  \  /   / |   ____||  |      /      | /  __  \  |   \/   | |   ____|   
+     \   \/    \/   /  |  |__   |  |     |  ,----'|  |  |  | |  \  /  | |  |__      
+      \            /   |   __|  |  |     |  |     |  |  |  | |  |\/|  | |   __|     
+       \    /\    /    |  |____ |  `----.|  `----.|  `--'  | |  |  |  | |  |____    
+        \__/  \__/     |_______||_______| \______| \______/  |__|  |__| |_______|   
+                                                                                
+        EOF
+        sleep(1)
+    puts <<-'EOF'
+
+                        .___________.     ______   
+                        |           |    /  __  \  
+                        `---|  |----`   |  |  |  | 
+                            |  |        |  |  |  | 
+                            |  |        |  `--'  | 
+                            |__|         \______/  
+                                                  
+    EOF
+    sleep(1)
+    puts <<-'EOF'
+    ██████   █████  ████████ ████████ ██      ███████ ███████ ██   ██ ██ ██████  
+    ██   ██ ██   ██    ██       ██    ██      ██      ██      ██   ██ ██ ██   ██ 
+    ██████  ███████    ██       ██    ██      █████   ███████ ███████ ██ ██████  
+    ██   ██ ██   ██    ██       ██    ██      ██           ██ ██   ██ ██ ██      
+    ██████  ██   ██    ██       ██    ███████ ███████ ███████ ██   ██ ██ ██      
+ 
+    EOF
+    sleep(2)
   end
 end
