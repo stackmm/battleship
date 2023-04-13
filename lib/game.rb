@@ -11,7 +11,7 @@ class Game
     system "clear"
     welcome_message
     puts "Enter p to play. Enter q to quit."
-    input = gets.chomp.downcase
+    input = gets.chomp.downcase[0]
     if input == "p"
       setup_game
       play_game
@@ -20,6 +20,7 @@ class Game
       exit
     else 
       puts "Invalid Input. Please try again"
+      sleep(2)
       main_menu
     end
   end
@@ -78,7 +79,7 @@ class Game
     end
 
     if computer_lost?
-      puts "You won!"
+      winner_message
     else
       puts "I won!"
     end
@@ -163,7 +164,7 @@ class Game
 
   def play_again?
     puts "Would you like to restart the game? (y/n)"
-    input = gets.chomp.downcase
+    input = gets.chomp.downcase[0]
     if input == 'y'
       clear_boards
       main_menu
@@ -214,5 +215,39 @@ class Game
  
     EOF
     sleep(2)
+  end
+
+  def winner_message
+    puts <<-'EOF'
+    __      __   ______   __    __         ______   _______   ________                        
+    |  \    /  \ /      \ |  \  |  \       /      \ |       \ |        \                       
+     \$$\  /  $$|  $$$$$$\| $$  | $$      |  $$$$$$\| $$$$$$$\| $$$$$$$$                       
+      \$$\/  $$ | $$  | $$| $$  | $$      | $$__| $$| $$__| $$| $$__                           
+       \$$  $$  | $$  | $$| $$  | $$      | $$    $$| $$    $$| $$  \                          
+        \$$$$   | $$  | $$| $$  | $$      | $$$$$$$$| $$$$$$$\| $$$$$                          
+        | $$    | $$__/ $$| $$__/ $$      | $$  | $$| $$  | $$| $$_____                        
+        | $$     \$$    $$ \$$    $$      | $$  | $$| $$  | $$| $$     \                       
+         \$$      \$$$$$$   \$$$$$$        \$$   \$$ \$$   \$$ \$$$$$$$$                       
+                                                                                     
+                       ________  __    __  ________                                            
+                      |        \|  \  |  \|        \                                           
+                       \$$$$$$$$| $$  | $$| $$$$$$$$                                           
+                         | $$   | $$__| $$| $$__                                               
+                         | $$   | $$    $$| $$  \                                              
+                         | $$   | $$$$$$$$| $$$$$                                              
+                         | $$   | $$  | $$| $$_____                                            
+                         | $$   | $$  | $$| $$     \                                           
+                          \$$    \$$   \$$ \$$$$$$$$                                           
+                                                                                                                                                                                
+     __       __        ______        __    __        __    __        ________        _______  
+    |  \  _  |  \      |      \      |  \  |  \      |  \  |  \      |        \      |       \ 
+    | $$ / \ | $$       \$$$$$$      | $$\ | $$      | $$\ | $$      | $$$$$$$$      | $$$$$$$\
+    | $$/  $\| $$        | $$        | $$$\| $$      | $$$\| $$      | $$__          | $$__| $$
+    | $$  $$$\ $$        | $$        | $$$$\ $$      | $$$$\ $$      | $$  \         | $$    $$
+    | $$ $$\$$\$$        | $$        | $$\$$ $$      | $$\$$ $$      | $$$$$         | $$$$$$$\
+    | $$$$  \$$$$       _| $$_       | $$ \$$$$      | $$ \$$$$      | $$_____       | $$  | $$
+    | $$$    \$$$      |   $$ \      | $$  \$$$      | $$  \$$$      | $$     \      | $$  | $$
+     \$$      \$$       \$$$$$$       \$$   \$$       \$$   \$$       \$$$$$$$$       \$$   \$$
+    EOF
   end
 end
